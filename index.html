@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<meta lang="ko" />
-<title>Lion Blog Repo</title>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lion Blog</title>
 
-<head>
-  <!-- <link rel="stylesheet" href="style.css" /> -->
-    <!-- Toast UI -->
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
     <link
       rel="stylesheet"
-      href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.min.css"
+      href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"
     />
-    <!-- Toast UI -->
-  
-    <!-- prism.js -->
+
+    <!-- Toast Highlight -->
     <link
       rel="stylesheet"
       href="https://uicdn.toast.com/editor-plugin-code-syntax-highlight/latest/toastui-editor-plugin-code-syntax-highlight.min.css"
@@ -22,8 +22,8 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
     />
-    <!-- prism.js -->
-  
+    <!-- Toast Highlight -->
+
     <!-- katex -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.13/katex.min.js"></script>
     <link
@@ -31,89 +31,96 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.13/katex.min.css"
     />
     <!-- katex -->
-  
-    <!-- Toast UML -->
+
+    <!-- uml  -->
     <script src="https://uicdn.toast.com/editor-plugin-uml/latest/toastui-editor-plugin-uml.min.js"></script>
-    <!-- Toast UML -->
-  <style>
+    <!-- uml  -->
+
+    <style>
+      body {
+        margin: 0;
+      }
+
       @font-face {
-      font-family: "GmarketSansMedium";
-      src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
-        format("woff");
-      font-weight: normal;
-      font-style: normal;
-    }
+        font-family: "GmarketSansMedium";
+        src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff") format("woff");
+        font-weight: normal;
+        font-style: normal;
+      }
 
-    #viewer-1 {
-      padding: 10px;
-    }
+      #viewer-1 {
+        padding: 0 10px;
+      }
 
-    body {
-      margin: 0;
-    }
+      html>body,
+      html>body .toastui-editor-contents,
+      html>body .toastui-editor-contents code,
+      html>body .toastui-editor-contents pre {
+        font-family: "GmarketSansMedium";
+      }
+    </style>
+  </head>
 
-    html > body,
-    html > body .toastui-editor-contents {
-      font-family: "GmarketSansMedium";
-    }
-  </style>
-</head>
-<body>
-  <div id="viewer-1"></div>
+  <body>
+    <div id="viewer-1"></div>
+
     <ul>
-      <li><a href="javascript:showPage(3);">3</a></li>
-      <li><a href="javascript:showPage(2);">2</a></li>
-      <li><a href="javascript:showPage(1);">1</a></li>
+      <li><a href="javascript:showPage(3);">3번글</a></li>
+      <li><a href="javascript:showPage(2);">2번글</a></li>
+      <li><a href="javascript:showPage(1);">1번글</a></li>
     </ul>
 
-  <script>
-  const Editor = toastui.Editor;
+    <script>
+      const Editor = toastui.Editor;
 
-    function katexPlugin() {
-      const toHTMLRenderers = {
-        katex(node) {
-          console.log("HI");
+      function katexPlugin() {
+        const toHTMLRenderers = {
+          katex(node) {
+            console.log("HI");
 
-          let html = katex.renderToString(node.literal, {
-            throwOnError: false,
-          });
+            let html = katex.renderToString(node.literal, {
+              throwOnError: false,
+            });
 
-          return [
-            { type: "openTag", tagName: "div", outerNewLine: true },
-            { type: "html", content: html },
-            { type: "closeTag", tagName: "div", outerNewLine: true },
-          ];
-        },
-      };
+            return [
+              { type: "openTag", tagName: "div", outerNewLine: true },
+              { type: "html", content: html },
+              { type: "closeTag", tagName: "div", outerNewLine: true },
+            ];
+          },
+        };
 
-      return { toHTMLRenderers };
-    }
+        return { toHTMLRenderers };
+      }
 
-    const viewer1 = Editor.factory({
-      el: document.querySelector("#viewer-1"),
-      viewer: true,
-      initialValue: viewer1MarkdownSource,
-      plugins: [
-        [toastui.Editor.plugin.codeSyntaxHighlight, { highlighter: Prism }],
-        katexPlugin,
-        [
-          toastui.Editor.plugin.uml,
-          { rendererURL: "http://www.plantuml.com/plantuml/svg/" },
+      const viewer1MarkdownSource = "...";
+
+      const viewer1 = Editor.factory({
+        el: document.querySelector("#viewer-1"),
+        viewer: true,
+        initialValue: viewer1MarkdownSource,
+        plugins: [
+          [toastui.Editor.plugin.codeSyntaxHighlight, { highlighter: Prism }],
+          katexPlugin,
+          [
+            toastui.Editor.plugin.uml,
+            { rendererURL: "http://www.plantuml.com/plantuml/svg/" },
+          ],
         ],
-      ],
-    });
+      });
 
-    function showPage(pageNo) {
-      fetch(pageNo + ".md")
-        .then(response => response.text())
-        .then(text => {
-         viewer1.setMarkDown(text);
+      function showPage(pageNo) {
+        fetch(pageNo + ".md")
+          .then((response) => response.text())
+          .then((text) => {
+            viewer1.setMarkdown(text);
 
-         window.scrollTo({
-          top: 0,
-          behavior: "smooth"
-         });
-        });
-    }
-  </script>
-</body>
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          });
+      }
+    </script>
+  </body>
+</html>

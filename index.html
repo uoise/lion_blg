@@ -59,29 +59,6 @@
   </style>
 </head>
 <body>
-  <template id="viewer-1-template">
-    # h1 
-    ## h2 
-    - 하하 
-    - 호호 
-    - 히히 
-
-
-
-
-
-    ```html
-    <script src="경로"></script>
-    ``` 
-
-    $$uml
-    (First usecase)
-    (Another usecase) as (UC2)
-    usecase UC3
-    usecase (Last\nusecase) as UC4
-    $$
-
-  </template>
   <div id="viewer-1"></div>
     <ul>
       <li><a href="javascript:showPage(3);">3</a></li>
@@ -90,29 +67,7 @@
     </ul>
 
   <script>
-    function stripIndent(str) {
-      const lines = str.split("\n");
-      let minIndent = Infinity;
-
-      for (let i = 1; i < lines.length; i++) {
-        const line = lines[i];
-        const indent = line.search(/\S/);
-
-        if (indent !== -1 && indent < minIndent) {
-          minIndent = indent;
-        }
-      }
-
-      if (minIndent !== Infinity) {
-        for (let i = 0; i < lines.length; i++) {
-          lines[i] = lines[i].slice(minIndent);
-        }
-      }
-
-      return lines.join("\n");
-    }
-
-    const Editor = toastui.Editor;
+  const Editor = toastui.Editor;
 
     function katexPlugin() {
       const toHTMLRenderers = {
@@ -133,11 +88,6 @@
 
       return { toHTMLRenderers };
     }
-
-    const viewer1TemplateEl = document.querySelector("#viewer-1-template");
-    const viewer1MarkdownSource = stripIndent(viewer1TemplateEl.innerHTML);
-
-    
 
     const viewer1 = Editor.factory({
       el: document.querySelector("#viewer-1"),

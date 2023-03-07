@@ -102,11 +102,12 @@
         ],
       ],
     });
+
     function showPage(pageNo) {
       fetch(pageNo + ".md")
         .then(response => response.text())
         .then(text => {
-         viewer1.setMarkDown(Text);
+         viewer1.setMarkDown(text);
 
          window.scrollTo({
           top: 0,
